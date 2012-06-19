@@ -1,38 +1,38 @@
 # JSONStream
 
-streaming JSON.parse and stringify
+streaming JSON.parse and stringify. Don't wait for all the results to finish before doing stuff.
+
+## Jam install
+
+```
+jam install JSONStream
+```
+
 
 ## example
 
 ```javascript
 
-var request = require('request')
-  , JSONStream = require('JSONStream')
-  , es = require('event-stream')
+            require(['JSONStream'], function (JSONStream) {
 
-var parser = JSONStream.parse(['rows', /./])
-  , req = request({url: 'http://isaacs.couchone.com/registry/_all_docs'})
-  , logger = es.mapSync(function (data) {
-      console.error(data)
-      return data
-    })
+                var xhr = new XMLHttpRequest()
+                xhr.open("GET", "http://proxy.max.iriscouch.com:1234/oakland_assessor/_all_docs?include_docs=true", true);
+                var stream = new JSONStream.XHRStream(xhr)
+
+
+                var json = JSONStream.parse(['rows', /./, 'doc'])
+                stream.pipe(json)
+                json.on('data', function(doc) {
+                   console.log(doc);
+                });
+
+
+            });
 ```
 
-in node 0.4.x
+Couchdb does not yet allow CORS requests, so the above example is using a proxy in front of the actual couch. See [CORS Proxy](https://github.com/daleharvey/CORS-Proxy).
 
-``` javascript
 
-req.pipe(parser)
-parser.pipe(logger)
-
-```
-
-in node v0.5.x
-
-``` javascript
-req.pipe(parser).pipe(logger)
-
-```
 
 ## JSONStream.parse(path)
 
@@ -124,6 +124,7 @@ https://github.com/creationix/jsonparse/issues/2
 
 ## Acknowlegements
 
+Max Ogden!!!
 this module depends on https://github.com/creationix/jsonparse  
 by Tim Caswell  
 and also thanks to Florent Jaby for teaching me about parsing with:
