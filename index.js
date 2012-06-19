@@ -70,8 +70,13 @@ define('JSONStream', ['stream'], function(stream) {
       stream.readable = true
       stream.writable = true
       stream.write = function (chunk) {
-        if('string' === typeof chunk)
-          chunk = new Buffer(chunk)
+        if('string' === typeof chunk) {
+
+                var buf = new Array(chunk.length)
+                for (var i = 0; i < chunk.length; i++) buf[i] = chunk.charCodeAt(i)
+                chunk = new Int32Array(buf)
+
+        }
         parser.write(chunk)
       }
       stream.end = function (data) {

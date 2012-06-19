@@ -1,6 +1,6 @@
 {
   "name": "JSONStream"
-, "main" : "stream.js"
+, "main" : "index.js"
 , "version": "0.2.0-1"
 , "description": "a streaming JSON parser, for AMD"
 , "dependencies": {
