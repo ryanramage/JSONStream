@@ -13,21 +13,21 @@ jam install JSONStream
 
 ```javascript
 
-            require(['JSONStream'], function (JSONStream) {
+require(['JSONStream'], function (JSONStream) {
 
-                var xhr = new XMLHttpRequest()
-                xhr.open("GET", "http://proxy.max.iriscouch.com:1234/oakland_assessor/_all_docs?include_docs=true", true);
-                var stream = new JSONStream.XHRStream(xhr)
-
-
-                var json = JSONStream.parse(['rows', /./, 'doc'])
-                stream.pipe(json)
-                json.on('data', function(doc) {
-                   console.log(doc);
-                });
+	var xhr = new XMLHttpRequest()
+    xhr.open("GET", "http://proxy.max.iriscouch.com:1234/oakland_assessor/_all_docs?include_docs=true", true);
+    var stream = new JSONStream.XHRStream(xhr)
 
 
-            });
+    var json = JSONStream.parse(['rows', /./, 'doc'])
+    stream.pipe(json)
+    json.on('data', function(doc) {
+        console.log(doc); // The goods. This is one complete doc.
+    });
+
+
+});
 ```
 
 Couchdb does not yet allow CORS requests, so the above example is using a proxy in front of the actual couch. See [CORS Proxy](https://github.com/daleharvey/CORS-Proxy).
